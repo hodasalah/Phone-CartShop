@@ -1,0 +1,285 @@
+this file to remember packages i use
+====================================
+                ################################################
+                css style packages[radium  , styled-components]
+                ################################################
+////// ==> radium
+=================
+  * this package for use media query and selectors 
+    in inline style
+  * npm install --save radium
+  * we can use radium in class or functional component
+  * import Radium from 'radium'
+  * export default Radium(App) 
+**** how use it
+==============
+[1]==> using radium with pesoudo selectors
+------------------------------------------
+const style = {
+    ':hover':{
+        backgroundColor:'lightgreen',
+        color:'black'
+    }
+}
+if we want to chang  style
+------>
+style[':hover'] = {
+        backgroundColor:'lightred',
+        color:red
+}
+[2]==> using radium with media Query or keyframes
+------------------------------------------
+ATTENTION >>>> WE CAN USE MEDIA QUERY IN CSS FILE NORMALLY
+BUT NOT IN INLINE STYLE  SO RADIUM IS BEST SOLUTION TO USE 
+MEDIA QUERY IN INLINE STYLE
+we use StyleRoot  from radium and wrap all application in it
+<StyleRoot>
+    <div className="App"></div>
+</StyleRoot>
+----------------
+* first import radium then wrap component in it
+    * import Radium , {StyleRoot} from 'radium'--> in app
+    * export default Radium(App)
+    * export default Radium(Person)
+const StylePrps ={
+    '@media (min-width:500px)':{
+        width:'450px'
+    }
+}
+########################################
+ ///// ---> Styled Components 
+-------------------------------
+* we use it in inline style but it adds css styled between
+<style></style> in <head></head> tag
+* it also add dynamic classes 
+* npm install --save styled-components
+* import styled from 'styled-components'
+* Button = styled.button`OUR STYLE HERE`
+* between `` we write regular css like 
+    background-color:#333 without singleqouts or cammelcase
+* we use & with pasoudo css
+---------------------->>>example
+////[2] styled component with normal css and media query
+----------------------------------------------
+const DivStyled = styled.div`
+        margin:16px auto;
+        background-color: beige;
+        padding:16px 20px;
+        border:1px solid #eee;
+        box-shadow: 0 0 4px rgba(0,0, 0, 0.3);
+        @media(min-width:450px){
+                width:400px;
+        }
+    `
+<DivStyled> /// it was --> <div></div>
+    code
+</DivStyled>
+------------------------------------
+////[2] styled component with pesoudo css
+const Button =stylrd.button`
+    background-color:green;
+    color:white;
+    &:hover{
+        background-color:lightgreen,
+        color:black
+    }`;
+=================================================
+        PROPtYPES PACKAGE FROM REACT
+=================================================
+* we can use it in class and functional components
+* $ npm install --save prop-types
+* import PropTypes from 'prop-types'
+* ComponentName.propTypes(important start with lowercase)={
+    propName:PropTypes.string,
+    propName:PropTypes.func,
+    propName:PropTypes.object
+}
+=================================================
+      SELECT ELEMENTS WITH REFS REACT
+=================================================
+WE CAN USE MANY WAYS
+[1] THE OLD WAY
+----------------
+* this way with class component
+* USE ref attribute in element
+* <input ref={(inputEl)=>inputEl.focus()} />
+* to use focus method with many element we use 
+    global var in class
+========
+    EXAMPLE
+========
+class App extends Component{
+    componentDidMount(){
+        this.inputElement.focus()
+    }
+    render(){
+        return(
+            <input ref={(inputEl)=>this.inputElement= inputEl} />
+        )
+    }
+}
+-----------------------------OR ----------------------
+--------    (hint :this is just like above exm)  -------
+class App extends Component{
+    constructor(props){
+        super(props)
+        this.inputElement=null //step1
+        this.setInputElRef=(element)=>{ //step 2
+            this.inputElement=element
+        }
+    }
+    componentDidMount(){
+        this.inputElement.focus() //step 4
+    }
+    render(){
+        return(
+            <input ref={this.setInputElRef} /> //step3 
+        )
+    }
+}
+[2] THE NEW WAY
+----------------
+* IN THIS WAY WE SHOULD USE CONSTRUCTOR method
+* THEN WE MAKE AGLOBAL VAR  AND STORE React.createRef()
+* THEN USE THIS GLOBAL VAR IN REF attribute IN element
+* THEN WE CAN USE IT IN componentDidMount BUT CALL CURRENT attribute
+========
+    EXAMPLE
+========
+class App extends Component{
+    constructor(props){ //--> step 1
+        super(props);
+        this.inputElementRef=React.createRef() // -->step 2
+    }
+    componentDidMount(){
+        this.inputElementRef.current.focus() //-->step 4
+    }
+    render(){
+        return(
+            <input ref={this.inputElementRef} /> // -->step 3
+        )
+    }
+}
+[3] SELECT CLASS COMPONONT
+==========================
+======>CHILD Component============
+================================
+class Input extends Component {
+   constructor(props) {
+       super(props)
+       this.inputRef=React.createRef()
+   }
+    focusInputByButton=()=>{
+        this.inputRef.current.focus();
+    }
+
+    render() {
+        return (
+            <div>
+                <input type='text' ref={this.inputRef} />
+            </div>
+        )
+    }
+}
+export default Input;
+==========================
+======>PARENT Component============
+================================
+import Input from './Input'
+class InputpARENT extends Component {
+   constructor(props) {
+       super(props)
+        this.componentRef = React.createRef();
+    }
+    clickHandler=()=>{
+        this.componentRef.current.focus()
+    }
+    render() {
+        return (
+            <div>
+                <Input ref={this.componentRef} />
+                <button style={Style} 
+                onClick={this.clickHandler}>FocusClassInput</button>
+            </div>
+        );
+    }
+}
+----------------------------------------
+[4] SELECT FUNCTION COMPONONT 
+    USING (React.forwardRef())
+==============================
+==========================
+======>CHILD Component============
+================================
+const Input =React.forwardRef((props , ref )=>{
+        return (
+            <div>
+                <input type='text' ref={ref} />
+            </div>
+        )   
+});
+export default Input;
+==========================
+======>PARENT Component============
+================================
+import Input from './Input'
+class InputpARENT extends Component {
+   constructor(props) {
+       super(props)
+        this.componentRef = React.createRef();
+    }
+    clickHandler=()=>{
+        this.componentRef.current.focusInputByButton()
+    }
+    render() {
+        return (
+            <div>
+                <Input ref={this.componentRef} />
+                <button style={Style} 
+                onClick={this.clickHandler}>FocusClassInput</button>
+            </div>
+        );
+    }
+}
+----------------
+React.forwardRef(component)
+const funComponent=React.forwardRef(
+    (props,ref)=>{<ComponentBody ref={ref}/>}
+);
+        ==========================================
+                    REACT.LAZY() 
+        ==========================================
+this approach is enable us to make lazy load without making
+a previous hoc
+
+import React ,{Component , Suspense} from 'react';
+let Posts = React.lazy(()=>import('path/posts'));
+---------------->
+THEN WE CAN USE IT IN MANY cases
+---------------->
+[1] case one
+=============
+<Route path="/posts" render={()=>(
+    <Suspense fallback={<div>Loading ...</div>}>
+        <Posts/>
+    </Suspense>
+    )} 
+/>
+[2] case two
+=============
+state={
+showPosts:false
+}
+TogglePosts = ()=>{
+this.setState(prevState=>{showPosts:!prevState.showPosts})
+}
+return(
+    <div>
+        <button onClick={this.TogglePosts}>
+            togglePosts
+        </button ? (<Suspense fallback={<div>Loading ...</div>}>
+        <Posts/>
+    </Suspense>) : null}
+    </div>
+)
+

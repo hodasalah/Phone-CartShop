@@ -1,0 +1,24 @@
+install bootstrap in react
+----------------------------
+[1] npm install --save bootstrap
+[2]in app.js 
+============
+    import 'bootstrap/dist/css/bottstrap.min.css'
+----------------------------------------------------
+to display anot found page use 
+<Route component={NotFoundPageComponent}>
+without path
+======================================================================
+if we want to make afile.js in component folder like i want to make folder name cart in omponent folder in cart folder i want to make cart.js
+to import this file your path will be
+'components/cart/Cart'
+i want to make my file path shortlike i want it to be
+'components/cart'
+how can i make webpack know that i mean 'components/cart/Cart'
+there are 3 options
+[1]--> write full path 'components/cart/Cart'
+[2]-->change name of "cart.js" to "index.js" webpack willl understand
+[3]-->in cart folder make anew file "package.json" and write in it
+{
+  "main":"cart.js"
+}
